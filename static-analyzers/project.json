@@ -1,0 +1,13 @@
+{
+  "frameworks": {
+    "net45": {
+      "dependencies": {
+        "BinSkim": "1.2.8-beta"
+      }
+    }
+  },
+  "runtimes": {
+    "win7-x64": {},
+    "win7-x86": {}
+  }
+}

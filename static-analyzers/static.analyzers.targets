@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" InitialTargets="RunStaticAnalyzers" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <DotnetCliPath>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\Tools\dotnetcli\dotnet.exe'))</DotnetCliPath>
+    <StaticAnalyzersProjectJson>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\project.json'))</StaticAnalyzersProjectJson>
+    <StaticAnalyzersDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\Tools\StaticAnalyzers\'))</StaticAnalyzersDirectory>
+    <BinSkimPath>$([System.IO.Path]::GetFullPath('$(StaticAnalyzersDirectory)\BinSkim\1.2.8-beta\tools\x64\BinSkim.exe'))</BinSkimPath>
+  </PropertyGroup>
+
+  <Target Name="RunStaticAnalyzers" DependsOnTargets="DownloadStaticAnalyzers;RunBinSkim" > <!-- Build; -->
+  </Target>
+
+  <Target Name="DownloadStaticAnalyzers">
+    <Exec Command="$(DotnetCliPath) restore $(StaticAnalyzersProjectJson) --packages $(StaticAnalyzersDirectory)"/> 
+  </Target>
+
+  <Target Name="RunBinSkim">
+  </Target>
+
+</Project>
