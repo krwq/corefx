@@ -16,10 +16,10 @@ namespace System.Security.Cryptography.Xml
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA5351", Justification = "HMACMD5 needed for compat.")]
         public static object CreateFromName(string name)
         {
-            if (name.ToLowerInvariant().Contains("md5"))
-            {
-                throw new Exception($"CreateFromName: {name}");
-            }
+            //if (name.ToLowerInvariant().Contains("md5"))
+            //{
+            //    throw new Exception($"CreateFromName: {name}");
+            //}
             switch (name)
             {
                 case "http://www.w3.org/TR/2001/REC-xml-c14n-20010315":
@@ -73,6 +73,7 @@ namespace System.Security.Cryptography.Xml
                 // remove attribute from this method when removing them
                 case "http://www.w3.org/2000/09/xmldsig#sha1":
                     return SHA1.Create();
+                case "MD5":
                 case "http://www.w3.org/2001/04/xmldsig-more#hmac-md5":
                     return new HMACMD5();
             }
