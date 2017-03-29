@@ -75,7 +75,7 @@ namespace System.Security.Cryptography.Xml
                     return SHA1.Create();
                 case "MD5":
                 case "http://www.w3.org/2001/04/xmldsig-more#hmac-md5":
-                    return HMACMD5.Create();
+                    return new HMACMD5();
             }
 
             return CryptoConfig.CreateFromName(name);
