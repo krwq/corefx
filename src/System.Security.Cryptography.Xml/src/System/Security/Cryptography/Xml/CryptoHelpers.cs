@@ -12,10 +12,17 @@ namespace System.Security.Cryptography.Xml
 {
     internal static class CryptoHelpers
     {
+        private static bool _test = false;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA5350", Justification = "SHA1 needed for compat.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA5351", Justification = "HMACMD5 needed for compat.")]
-        public static object CreateFromName(string name)
+        public static object CreateFromName(string name, bool testremoveme = false)
         {
+            _test = _test || testremoveme;
+            if (_test)
+            {
+                throw new Exception($"CreateFromName: {name}");
+            }
             switch (name)
             {
                 case "http://www.w3.org/TR/2001/REC-xml-c14n-20010315":
