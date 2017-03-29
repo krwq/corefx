@@ -74,6 +74,7 @@ namespace System.Security.Cryptography.Xml
                 case "http://www.w3.org/2000/09/xmldsig#sha1":
                     return SHA1.Create();
                 case "MD5":
+                    return MD5.Create();
                 case "http://www.w3.org/2001/04/xmldsig-more#hmac-md5":
                     return new HMACMD5();
             }
