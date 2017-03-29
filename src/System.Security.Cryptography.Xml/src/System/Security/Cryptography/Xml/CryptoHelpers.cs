@@ -77,6 +77,8 @@ namespace System.Security.Cryptography.Xml
                     return MD5.Create();
                 case "http://www.w3.org/2001/04/xmldsig-more#hmac-md5":
                     return new HMACMD5();
+                case "http://www.w3.org/2001/04/xmlenc#tripledes-cbc":
+                    return TripleDES.Create();
             }
 
             return CryptoConfig.CreateFromName(name);
