@@ -1303,15 +1303,6 @@ namespace System.Security.Cryptography.Xml.Tests
         }
 
         [Fact]
-        public void RemoveMe_TestTest()
-        {
-            var hmacmd5 = new HMACMD5();
-            var inp = new byte[1000];
-            var outp = new byte[5000];
-            hmacmd5.TransformBlock(inp, 0, 100, outp, 0);
-        }
-
-        [Fact]
         public void SignHMAC_MD5()
         {
             // works as long as the string can be used by CryptoConfig to create 

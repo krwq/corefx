@@ -12,14 +12,11 @@ namespace System.Security.Cryptography.Xml
 {
     internal static class CryptoHelpers
     {
-        private static bool _test = false;
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA5350", Justification = "SHA1 needed for compat.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA5351", Justification = "HMACMD5 needed for compat.")]
-        public static object CreateFromName(string name, bool testremoveme = false)
+        public static object CreateFromName(string name)
         {
-            _test = _test || testremoveme;
-            if (_test)
+            if (name.ToLowerInvariant().Contains("md5"))
             {
                 throw new Exception($"CreateFromName: {name}");
             }
