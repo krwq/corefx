@@ -20,6 +20,8 @@ namespace System.Security.Cryptography.Xml.Tests
 <test>some text node</test>
 </example>";
 
+        private static bool SupportsDecryptValue => !PlatformDetection.IsFullFramework || PlatformDetection.IsNetfx462OrNewer();
+
         private static void SignXml(XmlDocument doc, AsymmetricAlgorithm key)
         {
             var signedXml = new SignedXml(doc)
@@ -59,7 +61,8 @@ namespace System.Security.Cryptography.Xml.Tests
             return signedXml.CheckSignature(certificate, verifySignatureOnly: true);
         }
 
-        [Fact]
+        // https://github.com/dotnet/corefx/issues/19270
+        [ConditionalFact(nameof(SupportsDecryptValue))]
         public void SignedXmlHasCertificateVerifiableSignature()
         {
             using (X509Certificate2 x509cert = TestHelpers.GetSampleX509Certificate())
