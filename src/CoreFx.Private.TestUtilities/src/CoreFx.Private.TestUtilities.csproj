@@ -39,6 +39,7 @@
     <Reference Include="System.Threading.Thread" />
     <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Runtime.Extensions" />
+    <Reference Include="System.Runtime.InteropServices" />
     <Reference Include="System.Diagnostics.Process" />
     <Reference Include="System.ComponentModel.Primitives" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation" />

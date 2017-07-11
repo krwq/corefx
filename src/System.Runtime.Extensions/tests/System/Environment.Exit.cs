@@ -100,9 +100,11 @@ namespace System.Tests
             RemoteInvoke(() =>
             {
                 Environment.Exit(997);
-                //Assert.True(false);
+                //Environment.ExitCode = 997;
+                //Assert.True(false, "foo");
                 return SuccessExitCode;
-            }).Dispose();
+            });
+            //Environment.Exit(997);
         }
     }
 }
