@@ -57,8 +57,12 @@ namespace System.Tests
 
             if (PlatformDetection.IsUap)
             {
-                psi.FileName = "dotnet.exe";//"corerun.exe";
-                psi.Arguments = $"{AppName} {expectedExitCode} {mode}";
+                //psi.FileName = "corerun.exe";
+                //psi.Arguments = $"{AppName} {expectedExitCode} {mode}";
+
+                psi.FileName = AppName;
+                psi.Arguments = $"{expectedExitCode} {mode}";
+
             }
             else if (PlatformDetection.IsFullFramework || PlatformDetection.IsNetNative)
             {
@@ -88,6 +92,17 @@ namespace System.Tests
                 }
                 Assert.Equal(expectedExitCode, p.ExitCode);
             }
+        }
+
+        [Fact]
+        public void Whensdfsdfsd()
+        {
+            RemoteInvoke(() =>
+            {
+                Environment.Exit(997);
+                //Assert.True(false);
+                return SuccessExitCode;
+            }).Dispose();
         }
     }
 }
