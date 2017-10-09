@@ -82,6 +82,7 @@ namespace System.Net.Security.Tests
                 output.WriteLine("kdestroy returned {0}", clearCreds.ExitCode);
                 return (clearCreds.ExitCode == 0);
             }
+
         }
 
         public bool CheckAndInitializeNtlm(bool isKrbAvailable)
