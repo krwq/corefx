@@ -85,17 +85,17 @@ namespace System
         private static DistroInfo GetDistroInfo() => new DistroInfo()
         {
             Id = Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.OperatingSystem,
-            VersionId = Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.OperatingSystemVersion
+            VersionId = new Version(Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.OperatingSystemVersion)
         };
 
         private static bool IsRedHatFamilyAndVersion(string versionId = null)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                IdVersionPair v = GetDistroInfo();
+                DistroInfo v = GetDistroInfo();
 
                 // RedHat includes minor version. We need to account for that when comparing
-                if ((v.Id == "rhel" || v.Id == "centos") && VersionEqual(versionId, v.VersionId))
+                if ((v.Id == "rhel" || v.Id == "centos") && VersionEquivalentWith(versionId, v.VersionId))
                 {
                     return true;
                 }
@@ -104,7 +104,7 @@ namespace System
             return false;
         }
 
-        private static bool VersionEqual(string expectedVersionId, string actualVersionId)
+        private static bool VersionEquivalentWith(Version expectedVersionId, Version actualVersionId)
         {
             if (expectedVersionId == null)
             {
@@ -145,7 +145,7 @@ namespace System
         private struct DistroInfo
         {
             public string Id { get; set; }
-            public string VersionId { get; set; }
+            public Version VersionId { get; set; }
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace System
         /// <param name="distroId">The distribution id.</param>
         /// <param name="versionId">The distro version.  If omitted, compares the distro only.</param>
         /// <returns>Whether the OS platform matches the given Linux distro and optional version.</returns>
-        private static bool IsDistroAndVersion(string distroId, string versionId = null)
+        private static bool IsDistroAndVersion(string distroId, Version versionId = null)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
