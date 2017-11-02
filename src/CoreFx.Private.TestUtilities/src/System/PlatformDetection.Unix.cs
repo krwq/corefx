@@ -31,11 +31,11 @@ namespace System
         public static bool IsOpenSUSE => IsDistroAndVersion("opensuse");
         public static bool IsUbuntu => IsDistroAndVersion("ubuntu");
         public static bool IsDebian => IsDistroAndVersion("debian");
-        public static bool IsDebian8 => IsDistroAndVersion("debian", "8");
-        public static bool IsUbuntu1404 => IsDistroAndVersion("ubuntu", "14.04");
-        public static bool IsUbuntu1604 => IsDistroAndVersion("ubuntu", "16.04");
-        public static bool IsUbuntu1704 => IsDistroAndVersion("ubuntu", "17.04");
-        public static bool IsUbuntu1710 => IsDistroAndVersion("ubuntu", "17.10");
+        public static bool IsDebian8 => IsDistroAndVersion("debian", new Version("8"));
+        public static bool IsUbuntu1404 => IsDistroAndVersion("ubuntu", new Version("14.04"));
+        public static bool IsUbuntu1604 => IsDistroAndVersion("ubuntu", new Version("16.04"));
+        public static bool IsUbuntu1704 => IsDistroAndVersion("ubuntu", new Version("17.04"));
+        public static bool IsUbuntu1710 => IsDistroAndVersion("ubuntu", new Version("17.10"));
         public static bool IsTizen => IsDistroAndVersion("tizen");
         public static bool IsFedora => IsDistroAndVersion("fedora");
         public static bool IsWindowsNanoServer => false;
