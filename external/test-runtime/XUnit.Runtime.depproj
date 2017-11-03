@@ -51,7 +51,7 @@
       <Version>0.10.0-alpha-experimental</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions">
-      <Version>2.1.0-preview1-25806-02</Version>
+      <Version>$(MicrosoftDotNetPlatformAbstractionsPackageVersion)</Version>
     </PackageReference>
     <PackageReference Include="CommandLineParser">
       <Version>2.1.1-beta</Version>

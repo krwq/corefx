@@ -51,7 +51,7 @@ namespace System
         public static bool IsRedHatFamily7 => IsRedHatFamilyAndVersion(7);
         public static bool IsNotFedoraOrRedHatFamily => !IsFedora && !IsRedHatFamily;
 
-        public static Version OSXKernelVersion { get; } = GetOSXKernelVersion();
+        public static Version OSXKernelVersion { get; } = ToVersion(Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.OperatingSystemVersion);
 
         public static string GetDistroVersionString()
         {
@@ -82,10 +82,20 @@ namespace System
                                 ver >> 24);
         }
 
+        static Version ToVersion(string versionString)
+        {
+            if (versionString.IndexOf('.') != -1)
+                return new Version(versionString);
+
+            // minor version is required by Version
+            // let's default it to 0
+            return new Version(int.Parse(versionString), 0);
+        }
+
         private static DistroInfo GetDistroInfo() => new DistroInfo()
         {
             Id = Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.OperatingSystem,
-            VersionId = new Version(Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.OperatingSystemVersion)
+            VersionId = ToVersion(Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.OperatingSystemVersion)
         };
 
         private static bool IsRedHatFamilyAndVersion(int major = -1, int minor = -1, int build = -1, int revision = -1)
@@ -124,20 +134,6 @@ namespace System
                 && (minor == -1 || minor == actualVersionId.Minor)
                 && (build == -1 || build == actualVersionId.Build)
                 && (revision == -1 || revision == actualVersionId.Revision);
-        }
-
-        private static Version GetOSXKernelVersion()
-        {
-            if (IsOSX)
-            {
-                byte[] bytes = new byte[256];
-                IntPtr bytesLength = new IntPtr(bytes.Length);
-                Assert.Equal(0, sysctlbyname("kern.osrelease", bytes, ref bytesLength, null, IntPtr.Zero));
-                string versionString = Encoding.UTF8.GetString(bytes);
-                return Version.Parse(versionString);
-            }
-
-            return new Version(0, 0, 0);
         }
 
         private static Version GetOSXProductVersion()
