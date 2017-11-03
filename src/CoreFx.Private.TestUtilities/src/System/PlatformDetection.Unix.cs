@@ -31,11 +31,11 @@ namespace System
         public static bool IsOpenSUSE => IsDistroAndVersion("opensuse");
         public static bool IsUbuntu => IsDistroAndVersion("ubuntu");
         public static bool IsDebian => IsDistroAndVersion("debian");
-        public static bool IsDebian8 => IsDistroAndVersion("debian", new Version("8"));
-        public static bool IsUbuntu1404 => IsDistroAndVersion("ubuntu", new Version("14.04"));
-        public static bool IsUbuntu1604 => IsDistroAndVersion("ubuntu", new Version("16.04"));
-        public static bool IsUbuntu1704 => IsDistroAndVersion("ubuntu", new Version("17.04"));
-        public static bool IsUbuntu1710 => IsDistroAndVersion("ubuntu", new Version("17.10"));
+        public static bool IsDebian8 => IsDistroAndVersion("debian", 8);
+        public static bool IsUbuntu1404 => IsDistroAndVersion("ubuntu", 14, 4);
+        public static bool IsUbuntu1604 => IsDistroAndVersion("ubuntu", 16, 4);
+        public static bool IsUbuntu1704 => IsDistroAndVersion("ubuntu", 17, 4);
+        public static bool IsUbuntu1710 => IsDistroAndVersion("ubuntu", 17, 10);
         public static bool IsTizen => IsDistroAndVersion("tizen");
         public static bool IsFedora => IsDistroAndVersion("fedora");
         public static bool IsWindowsNanoServer => false;
@@ -46,9 +46,9 @@ namespace System
         // RedHat family covers RedHat and CentOS
         public static bool IsRedHatFamily => IsRedHatFamilyAndVersion();
         public static bool IsNotRedHatFamily => !IsRedHatFamily;
-        public static bool IsRedHatFamily6 => IsRedHatFamilyAndVersion("6");
+        public static bool IsRedHatFamily6 => IsRedHatFamilyAndVersion(6);
         public static bool IsNotRedHatFamily6 => !IsRedHatFamily6;
-        public static bool IsRedHatFamily7 => IsRedHatFamilyAndVersion("7");
+        public static bool IsRedHatFamily7 => IsRedHatFamilyAndVersion(7);
         public static bool IsNotFedoraOrRedHatFamily => !IsFedora && !IsRedHatFamily;
 
         public static Version OSXKernelVersion { get; } = GetOSXKernelVersion();
@@ -88,64 +88,9 @@ namespace System
             VersionId = new Version(Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.OperatingSystemVersion)
         };
 
-        private static bool IsRedHatFamilyAndVersion(string versionId = null)
+        private static bool IsRedHatFamilyAndVersion(int major = -1, int minor = -1, int build = -1, int revision = -1)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                DistroInfo v = GetDistroInfo();
-
-                // RedHat includes minor version. We need to account for that when comparing
-                if ((v.Id == "rhel" || v.Id == "centos") && VersionEquivalentWith(versionId, v.VersionId))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool VersionEquivalentWith(Version expectedVersionId, Version actualVersionId)
-        {
-            if (expectedVersionId == null)
-            {
-                return true;
-            }
-
-            string[] expected = expectedVersionId.Split('.');
-            string[] actual = actualVersionId.Split('.');
-
-            if (expected.Length > actual.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < expected.Length; i++)
-            {
-                if (expected[i] != actual[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private static string RemoveQuotes(string s)
-        {
-            s = s.Trim();
-            if (s.Length >= 2 && s[0] == '"' && s[s.Length - 1] == '"')
-            {
-                // Remove quotes.
-                s = s.Substring(1, s.Length - 2);
-            }
-
-            return s;
-        }
-
-        private struct DistroInfo
-        {
-            public string Id { get; set; }
-            public Version VersionId { get; set; }
+            return IsDistroAndVersion((distro) => distro == "rhel" || distro == "centos", major, minor, build, revision);
         }
 
         /// <summary>
@@ -154,18 +99,31 @@ namespace System
         /// <param name="distroId">The distribution id.</param>
         /// <param name="versionId">The distro version.  If omitted, compares the distro only.</param>
         /// <returns>Whether the OS platform matches the given Linux distro and optional version.</returns>
-        private static bool IsDistroAndVersion(string distroId, Version versionId = null)
+        private static bool IsDistroAndVersion(string distroId, int major = -1, int minor = -1, int build = -1, int revision = -1)
+        {
+            return IsDistroAndVersion((distro) => distro == distroId, major, minor, build, revision);
+        }
+
+        private static bool IsDistroAndVersion(Predicate<string> distroPredicate, int major = -1, int minor = -1, int build = -1, int revision = -1)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 DistroInfo v = GetDistroInfo();
-                if (v.Id == distroId && (versionId == null || v.VersionId == versionId))
+                if (distroPredicate(v.Id) && VersionEquivalentWith(major, minor, build, revision, v.VersionId))
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private static bool VersionEquivalentWith(int major, int minor, int build, int revision, Version actualVersionId)
+        {
+            return (major == -1 || major == actualVersionId.Major)
+                && (minor == -1 || minor == actualVersionId.Minor)
+                && (build == -1 || build == actualVersionId.Build)
+                && (revision == -1 || revision == actualVersionId.Revision);
         }
 
         private static Version GetOSXKernelVersion()
@@ -242,5 +200,11 @@ namespace System
         private static extern int GlobalizationNative_GetICUVersion();
 
         public static bool IsSuperUser => geteuid() == 0;
+
+        private struct DistroInfo
+        {
+            public string Id { get; set; }
+            public Version VersionId { get; set; }
+        }
     }
 }
