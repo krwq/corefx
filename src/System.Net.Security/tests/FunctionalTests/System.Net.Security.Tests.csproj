@@ -22,6 +22,7 @@
   <ItemGroup>
     <Compile Include="NotifyReadVirtualNetworkStream.cs" />
     <Compile Include="DummyTcpServer.cs" />
+    <Compile Include="SslStreamSNITest.cs" />
     <Compile Include="TestConfiguration.cs" />
     <!-- SslStream Tests -->
     <Compile Include="CertificateChainValidation.cs" />

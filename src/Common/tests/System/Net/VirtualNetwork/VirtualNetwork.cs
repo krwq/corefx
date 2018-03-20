@@ -10,16 +10,26 @@ namespace System.Net.Test.Common
 {
     public class VirtualNetwork
     {
+        public class VirtualNetworkConnectionBroken : Exception
+        {
+            public VirtualNetworkConnectionBroken() : base("Connection broken") { }
+        }
+
         private readonly int WaitForReadDataTimeoutMilliseconds = 30 * 1000;
-        
+
         private readonly ConcurrentQueue<byte[]> _clientWriteQueue = new ConcurrentQueue<byte[]>();
         private readonly ConcurrentQueue<byte[]> _serverWriteQueue = new ConcurrentQueue<byte[]>();
 
         private readonly SemaphoreSlim _clientDataAvailable = new SemaphoreSlim(0);
         private readonly SemaphoreSlim _serverDataAvailable = new SemaphoreSlim(0);
 
+        private bool _connectionBroken = false;
+
         public void ReadFrame(bool server, out byte[] buffer)
         {
+            if (_connectionBroken)
+                throw new VirtualNetworkConnectionBroken();
+
             SemaphoreSlim semaphore;
             ConcurrentQueue<byte[]> packetQueue;
 
@@ -38,6 +48,9 @@ namespace System.Net.Test.Common
             {
                 throw new TimeoutException("VirtualNetwork: Timeout reading the next frame.");
             }
+
+            if (_connectionBroken)
+                throw new VirtualNetworkConnectionBroken();
 
             bool dequeueSucceeded = false;
             int remainingTries = 3;
@@ -62,6 +75,9 @@ namespace System.Net.Test.Common
 
         public void WriteFrame(bool server, byte[] buffer)
         {
+            if (_connectionBroken)
+                throw new VirtualNetworkConnectionBroken();
+
             SemaphoreSlim semaphore;
             ConcurrentQueue<byte[]> packetQueue;
 
@@ -81,6 +97,13 @@ namespace System.Net.Test.Common
 
             packetQueue.Enqueue(innerBuffer);
             semaphore.Release();
+        }
+
+        public void BreakConnection()
+        {
+            _connectionBroken = true;
+            _serverDataAvailable.Release(1000000);
+            _clientDataAvailable.Release(1000000);
         }
     }
 }
