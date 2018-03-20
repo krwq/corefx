@@ -351,15 +351,13 @@ namespace System.Net.Security
             AuthenticateAsServer(options);
         }
 
-        public void AuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions)
+        private void AuthenticateAsServer(SslServerAuthenticationOptions sslServerAuthenticationOptions)
         {
             SecurityProtocol.ThrowOnNotAllowed(sslServerAuthenticationOptions.EnabledSslProtocols);
             SetAndVerifyValidationCallback(sslServerAuthenticationOptions.RemoteCertificateValidationCallback);
 
             // Set the delegate on the options.
             sslServerAuthenticationOptions._certValidationDelegate = _certValidationDelegate;
-
-            SetServerCertificateSelectionCallbackWrapper(sslServerAuthenticationOptions);
 
             _sslState.ValidateCreateContext(sslServerAuthenticationOptions);
             _sslState.ProcessAuthentication(null);

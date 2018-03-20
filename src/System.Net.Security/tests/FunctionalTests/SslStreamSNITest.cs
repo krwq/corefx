@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +11,7 @@ using System.Net.Test.Common;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,11 +22,16 @@ namespace System.Net.Security.Tests
     [Trait("feature", "sni")]
     public class SslStreamSNITest
     {
+        private static IEnumerable<object[]> HostNameData()
+        {
+            yield return new object[] { "a" };
+            yield return new object[] { "test" };
+            yield return new object[] { new string('a', 100) };
+        }
+
         [Theory]
-        [InlineData("a")]
-        [InlineData("test")]
-        [InlineData("aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")]
-        public void ClientSendsSNIServerReceivesIt(string hostName)
+        [MemberData(nameof(HostNameData))]
+        public void SslStream_ClientSendsSNIServerReceives_Ok(string hostName)
         {
             X509Certificate serverCert = Configuration.Certificates.GetSelfSignedServerCertificate();
 
@@ -33,17 +43,18 @@ namespace System.Net.Security.Tests
 
                 SslServerAuthenticationOptions options = DefaultServerOptions();
 
-                bool callbackCalled = false;
+                int timesCallbackCalled = 0;
                 options.ServerCertificateSelectionCallback = (sender, actualHostName) =>
                 {
-                    callbackCalled = true;
+                    timesCallbackCalled++;
                     Assert.Equal(hostName, actualHostName);
                     return serverCert;
                 };
 
-                server.AuthenticateAsServer(options);
+                var cts = new CancellationTokenSource();
+                server.AuthenticateAsServerAsync(options, cts.Token).Wait();
 
-                Assert.True(callbackCalled);
+                Assert.Equal(1, timesCallbackCalled);
                 clientJob.Wait();
             },
             (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) =>
@@ -54,7 +65,7 @@ namespace System.Net.Security.Tests
         }
 
         [Fact]
-        public void ServerDoesNotKnowTheHostName()
+        public void SslStream_UnknownHostName_Fails()
         {
             WithVirtualConnection((server, client) =>
             {
@@ -63,20 +74,23 @@ namespace System.Net.Security.Tests
                         => client.AuthenticateAsClient("test"));
                 });
 
-                bool callbackCalled = false;
+                int timesCallbackCalled = 0;
                 SslServerAuthenticationOptions options = DefaultServerOptions();
                 options.ServerCertificateSelectionCallback = (sender, actualHostName) =>
                 {
-                    callbackCalled = true;
+                    timesCallbackCalled++;
                     return null;
                 };
 
-                Assert.Throws<NotSupportedException>(() => {
-                    server.AuthenticateAsServer(options);
-                });
+                var cts = new CancellationTokenSource();
+                Assert.ThrowsAsync<NotSupportedException>(async () => {
+                    await server.AuthenticateAsServerAsync(options, cts.Token);
+                }).Wait();
+
+                // to break connection so that client is not waiting
                 server.Dispose();
 
-                Assert.True(callbackCalled);
+                Assert.Equal(1, timesCallbackCalled);
 
                 clientJob.Wait();
             },

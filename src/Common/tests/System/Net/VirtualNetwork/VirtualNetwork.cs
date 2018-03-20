@@ -28,7 +28,9 @@ namespace System.Net.Test.Common
         public void ReadFrame(bool server, out byte[] buffer)
         {
             if (_connectionBroken)
+            {
                 throw new VirtualNetworkConnectionBroken();
+            }
 
             SemaphoreSlim semaphore;
             ConcurrentQueue<byte[]> packetQueue;
@@ -50,7 +52,9 @@ namespace System.Net.Test.Common
             }
 
             if (_connectionBroken)
+            {
                 throw new VirtualNetworkConnectionBroken();
+            }
 
             bool dequeueSucceeded = false;
             int remainingTries = 3;
@@ -76,7 +80,9 @@ namespace System.Net.Test.Common
         public void WriteFrame(bool server, byte[] buffer)
         {
             if (_connectionBroken)
+            {
                 throw new VirtualNetworkConnectionBroken();
+            }
 
             SemaphoreSlim semaphore;
             ConcurrentQueue<byte[]> packetQueue;
@@ -102,8 +108,8 @@ namespace System.Net.Test.Common
         public void BreakConnection()
         {
             _connectionBroken = true;
-            _serverDataAvailable.Release(1000000);
-            _clientDataAvailable.Release(1000000);
+            _serverDataAvailable.Release(1_000_000);
+            _clientDataAvailable.Release(1_000_000);
         }
     }
 }
