@@ -10,6 +10,7 @@ using System.Security.Authentication;
 using System.Security.Authentication.ExtendedProtection;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
+using System.Text;
 using Microsoft.Win32.SafeHandles;
 
 namespace System.Net.Security
@@ -79,6 +80,22 @@ namespace System.Net.Security
                 ref unusedAttributes);
 
             return SecurityStatusAdapterPal.GetSecurityStatusPalFromNativeInt(errorCode);
+        }
+
+        public unsafe static string GetServerIdentity(byte[] clientHello)
+        {
+            fixed (byte* clientHelloBytes = clientHello)
+            {
+                byte* serverIdentityBytes;
+                int serverIdentitySize;
+                int ret = Interop.SChannel.SslGetServerIdentity(clientHelloBytes, clientHello.Length, out serverIdentityBytes, out serverIdentitySize, 0);
+                if (ret != 0 || serverIdentitySize == 0)
+                {
+                    return null;
+                }
+
+                return Encoding.UTF8.GetString(serverIdentityBytes, serverIdentitySize);
+            }
         }
 
         public static SecurityStatusPal InitializeSecurityContext(SafeFreeCredentials credentialsHandle, ref SafeDeleteContext context, string targetName, SecurityBuffer[] inputBuffers, SecurityBuffer outputBuffer, SslAuthenticationOptions sslAuthenticationOptions)

@@ -172,6 +172,9 @@
     <Compile Include="$(CommonPath)\Interop\Windows\SChannel\Interop.Sec_Application_Protocols.cs">
       <Link>Common\Interop\Windows\SChannel\Interop.Sec_Application_Protocols.cs</Link>
     </Compile>
+    <Compile Include="$(CommonPath)\Interop\Windows\SChannel\Interop.ServerIdentity.cs">
+      <Link>Common\Interop\Windows\SChannel\Interop.ServerIdentity.cs</Link>
+    </Compile>
     <Compile Include="$(CommonPath)\Interop\Windows\SChannel\UnmanagedCertificateContext.cs">
       <Link>Common\Interop\Windows\SChannel\UnmanagedCertificateContext.cs</Link>
     </Compile>
