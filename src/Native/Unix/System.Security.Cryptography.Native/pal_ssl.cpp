@@ -577,16 +577,51 @@ extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SslCtxSetClien
     SSL_CTX_set_client_hello_cb(ctx, callback, arg);
 }
 
-extern "C" int32_t CryptoNative_SslClientHelloGet0Ext(SSL* ssl, int32_t type, const unsigned char** out, size_t* outlen)
+extern "C" void CryptoNative_SslClientHelloGetHostName(SSL* ssl, const unsigned char** out, size_t* outlen)
 {
-    return SSL_client_hello_get0_ext(ssl, type, out, outlen);
-}
+    const unsigned char* serverName;
+    size_t len;
 
-extern "C" int32_t CryptoNative_SslClientHelloGetHostName(SSL* ssl, int32_t type, const unsigned char** out, size_t* outlen)
-{
-    //TODO TODO TODO
+    if (!SSL_client_hello_get0_ext(ssl, TLSEXT_TYPE_server_name, &serverName, &len) || len <= 2)
+    {
+        *out = nullptr;
+        *outlen = 0;
+        return;
+    }
 
-    return SSL_client_hello_get0_ext(ssl, type, out, outlen);
+    // server name is of following structure:
+    // - 2 bytes: (total) list of names length
+    // - each name consists of following:
+    //   - 1 byte: type of name
+    //   - 2 bytes: name length
+    //   - <name length> bytes: name
+    // we expect only one name
+
+    const unsigned char* p = serverName;
+    size_t remaining = len - 2;
+    size_t listOfNamesLength = (*p++) << 8;
+    listOfNamesLength |= *p++;
+
+    if (listOfNamesLength != remaining || remaining <= 3 || *p++ != TLSEXT_NAMETYPE_host_name)
+    {
+        *out = nullptr;
+        *outlen = 0;
+        return;
+    }
+
+    remaining -= 3;
+    size_t hostNameLength = (*p++) << 8;
+    hostNameLength |= *p++;
+
+    if (remaining != hostNameLength)
+    {
+        *out = nullptr;
+        *outlen = 0;
+        return;
+    }
+
+    *out = p;
+    *outlen = hostNameLength;
 }
 
 extern "C" int32_t CryptoNative_SslCtxSetAlpnProtos(SSL_CTX* ctx, const uint8_t* protos, uint32_t protos_len)

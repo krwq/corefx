@@ -57,7 +57,7 @@ internal static partial class Interop
                     {
                         byte* buffer;
                         int len;
-                        Interop.Ssl.SslClientHelloGetExt(ssl, 0, out buffer, out int len); // type = 0 => TLSEXT_TYPE_server_name
+                        Interop.Ssl.SslClientHelloGetHostName(ssl, out buffer, out int len);
                         // or TLSEXT_NAMETYPE_host_name ?
                         if (buffer != null && len > 0)
                         {

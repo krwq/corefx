@@ -384,9 +384,9 @@ Shims the ssl_ctx_set_client_hello_cb method.
 extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SslCtxSetClientHelloCallback callback, void* arg);
 
 /*
-Shims the ssl_client_hello_get0_ext method.
+Gets hostname out of the client hello
 */
-extern "C" int32_t CryptoNative_SslClientHelloGet0Ext(SSL* ssl, int32_t type, const unsigned char** out, size_t* outlen);
+extern "C" void CryptoNative_SslClientHelloGetHostName(SSL* ssl, const unsigned char** out, size_t* outlen)
 
 /*
 Shims the ssl_ctx_set_alpn_protos method.
