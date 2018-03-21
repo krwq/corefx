@@ -386,7 +386,7 @@ extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SslCtxSetClien
 /*
 Gets hostname out of the client hello
 */
-extern "C" void CryptoNative_SslClientHelloGetHostName(SSL* ssl, const unsigned char** out, size_t* outlen)
+extern "C" void CryptoNative_SslClientHelloGetHostName(SSL* ssl, const unsigned char** out, size_t* outlen);
 
 /*
 Shims the ssl_ctx_set_alpn_protos method.

@@ -599,8 +599,8 @@ extern "C" void CryptoNative_SslClientHelloGetHostName(SSL* ssl, const unsigned 
 
     const unsigned char* p = serverName;
     size_t remaining = len - 2;
-    size_t listOfNamesLength = (*p++) << 8;
-    listOfNamesLength |= *p++;
+    size_t listOfNamesLength = (size_t)((*p++)) << 8;
+    listOfNamesLength |= (size_t)(*p++);
 
     if (listOfNamesLength != remaining || remaining <= 3 || *p++ != TLSEXT_NAMETYPE_host_name)
     {
@@ -610,8 +610,8 @@ extern "C" void CryptoNative_SslClientHelloGetHostName(SSL* ssl, const unsigned 
     }
 
     remaining -= 3;
-    size_t hostNameLength = (*p++) << 8;
-    hostNameLength |= *p++;
+    size_t hostNameLength = (size_t)(*p++) << 8;
+    hostNameLength |= (size_t)(*p++);
 
     if (remaining != hostNameLength)
     {
