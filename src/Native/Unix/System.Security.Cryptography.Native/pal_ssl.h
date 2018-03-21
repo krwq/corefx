@@ -125,6 +125,10 @@ typedef int32_t (*SslCtxSetAlpnCallback)(SSL* ssl,
     const uint8_t* in,
     uint32_t inlen,
     void* arg);
+
+// the function pointer definition for the callback used in SslCtxSetClientHelloCb
+typedef int32_t (*SslCtxSetClientHelloCallback)(SSL* ssl, int32_t* al, void* arg);
+
 /*
 Ensures that libssl is correctly initialized and ready to use.
 */
@@ -373,6 +377,16 @@ extern "C" int32_t CryptoNative_SslAddExtraChainCert(SSL* ssl, X509* x509);
 Shims the ssl_ctx_set_alpn_select_cb method.
 */
 extern "C" void CryptoNative_SslCtxSetAlpnSelectCb(SSL_CTX* ctx, SslCtxSetAlpnCallback cb, void *arg);
+
+/*
+Shims the ssl_ctx_set_client_hello_cb method.
+*/
+extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SslCtxSetClientHelloCallback callback, void* arg);
+
+/*
+Shims the ssl_client_hello_get0_ext method.
+*/
+extern "C" int32_t CryptoNative_SslClientHelloGet0Ext(SSL* ssl, int32_t type, const unsigned char** out, size_t* outlen);
 
 /*
 Shims the ssl_ctx_set_alpn_protos method.

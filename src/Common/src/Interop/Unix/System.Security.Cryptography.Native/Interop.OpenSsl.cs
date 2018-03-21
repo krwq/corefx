@@ -50,6 +50,25 @@ internal static partial class Interop
             return bindingHandle;
         }
 
+        private static SslCtxSetClientHelloCallback MakeClientHelloCallback(SslAuthenticationOptions sslAuthenticationOptions)
+        {
+            return new SslCtxSetClientHelloCallback((IntPtr ssl, ref int al, IntPtr arg) => {
+                    unsafe
+                    {
+                        byte* buffer;
+                        int len;
+                        Interop.Ssl.SslClientHelloGetExt(ssl, 0, out buffer, out int len); // type = 0 => TLSEXT_TYPE_server_name
+                        // or TLSEXT_NAMETYPE_host_name ?
+                        if (buffer != null && len > 0)
+                        {
+                            sslAuthenticationOptions.HostName = System.Text.Encoding.UTF8.GetString(buffer, len);
+                        }
+                        //TODO: if (buffer != null) OPENSSL_free(buffer)
+                    }
+                    return 1; // SSL_CLIENT_HELLO_SUCCESS
+                });
+        }
+
         internal static SafeSslHandle AllocateSslContext(SslProtocols protocols, SafeX509Handle certHandle, SafeEvpPKeyHandle certKeyHandle, EncryptionPolicy policy, SslAuthenticationOptions sslAuthenticationOptions)
         {
             SafeSslHandle context = null;
@@ -94,6 +113,11 @@ internal static partial class Interop
                 if (sslAuthenticationOptions.IsServer && sslAuthenticationOptions.RemoteCertRequired)
                 {
                     Ssl.SslCtxSetVerify(innerContext, s_verifyClientCertificate);
+                }
+
+                if (sslAuthenticationOptions.ServerCertSelectionDelegate != null)
+                {
+                    Interop.Ssl.SslCtxSetClientHelloCb(innerContext, MakeClientHelloCallback(sslAuthenticationOptions), IntPtr.Zero);
                 }
 
                 GCHandle alpnHandle = default;

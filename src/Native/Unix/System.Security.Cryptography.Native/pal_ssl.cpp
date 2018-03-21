@@ -572,6 +572,23 @@ extern "C" void CryptoNative_SslCtxSetAlpnSelectCb(SSL_CTX* ctx, SslCtxSetAlpnCa
 #endif
 }
 
+extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SslCtxSetClientHelloCallback callback, void* arg)
+{
+    SSL_CTX_set_client_hello_cb(ctx, callback, arg);
+}
+
+extern "C" int32_t CryptoNative_SslClientHelloGet0Ext(SSL* ssl, int32_t type, const unsigned char** out, size_t* outlen)
+{
+    return SSL_client_hello_get0_ext(ssl, type, out, outlen);
+}
+
+extern "C" int32_t CryptoNative_SslClientHelloGetHostName(SSL* ssl, int32_t type, const unsigned char** out, size_t* outlen)
+{
+    //TODO TODO TODO
+
+    return SSL_client_hello_get0_ext(ssl, type, out, outlen);
+}
+
 extern "C" int32_t CryptoNative_SslCtxSetAlpnProtos(SSL_CTX* ctx, const uint8_t* protos, uint32_t protos_len)
 {
 #if HAVE_OPENSSL_ALPN
