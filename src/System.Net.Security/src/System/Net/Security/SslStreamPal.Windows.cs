@@ -82,22 +82,6 @@ namespace System.Net.Security
             return SecurityStatusAdapterPal.GetSecurityStatusPalFromNativeInt(errorCode);
         }
 
-        public unsafe static string GetServerIdentity(byte[] clientHello)
-        {
-            fixed (byte* clientHelloBytes = clientHello)
-            {
-                byte* serverIdentityBytes;
-                int serverIdentitySize;
-                int ret = Interop.SChannel.SslGetServerIdentity(clientHelloBytes, clientHello.Length, out serverIdentityBytes, out serverIdentitySize, 0);
-                if (ret != 0 || serverIdentitySize == 0)
-                {
-                    return null;
-                }
-
-                return Encoding.UTF8.GetString(serverIdentityBytes, serverIdentitySize);
-            }
-        }
-
         public static SecurityStatusPal InitializeSecurityContext(SafeFreeCredentials credentialsHandle, ref SafeDeleteContext context, string targetName, SecurityBuffer[] inputBuffers, SecurityBuffer outputBuffer, SslAuthenticationOptions sslAuthenticationOptions)
         {
             Interop.SspiCli.ContextFlags unusedAttributes = default(Interop.SspiCli.ContextFlags);
@@ -114,6 +98,22 @@ namespace System.Net.Security
                             ref unusedAttributes);
 
             return SecurityStatusAdapterPal.GetSecurityStatusPalFromNativeInt(errorCode);
+        }
+
+        public unsafe static string GetServerIdentity(SslAuthenticationOptions sslAuthenticationOptions, byte[] clientHello)
+        {
+            fixed (byte* clientHelloBytes = clientHello)
+            {
+                byte* serverIdentityBytes;
+                int serverIdentitySize;
+                int ret = Interop.SChannel.SslGetServerIdentity(clientHelloBytes, clientHello.Length, out serverIdentityBytes, out serverIdentitySize, 0);
+                if (ret != 0 || serverIdentitySize == 0)
+                {
+                    return null;
+                }
+
+                return Encoding.UTF8.GetString(serverIdentityBytes, serverIdentitySize);
+            }
         }
 
         public static SecurityBuffer[] GetIncomingSecurityBuffers(SslAuthenticationOptions options, ref SecurityBuffer incomingSecurity)

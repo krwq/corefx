@@ -634,7 +634,7 @@ namespace System.Net.Security
 
             if (_sslAuthenticationOptions.ServerCertSelectionDelegate != null)
             {
-                string serverIdentity = SslStreamPal.GetServerIdentity(clientHello);
+                string serverIdentity = SslStreamPal.GetServerIdentity(_sslAuthenticationOptions, clientHello);
                 localCertificate = _sslAuthenticationOptions.ServerCertSelectionDelegate(serverIdentity);
 
             }

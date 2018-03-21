@@ -68,6 +68,9 @@ namespace System.Net.Security
         internal RemoteCertValidationCallback CertValidationDelegate { get; set; }
         internal LocalCertSelectionCallback CertSelectionDelegate { get; set; }
         internal ServerCertCallback ServerCertSelectionDelegate { get; set; }
+
+        // This should be set by OpenSSL callback
+        internal string HostName { get; set; }
     }
 }
 

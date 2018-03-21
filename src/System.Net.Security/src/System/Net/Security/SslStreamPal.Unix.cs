@@ -59,6 +59,11 @@ namespace System.Net.Security
             return HandshakeInternal(credential, ref context, inputBuffers[0], outputBuffer, sslAuthenticationOptions);
         }
 
+        public unsafe static string GetServerIdentity(SslAuthenticationOptions sslAuthenticationOptions, byte[] clientHello)
+        {
+            return sslAuthenticationOptions.HostName;
+        }
+
         public static SecurityBuffer[] GetIncomingSecurityBuffers(SslAuthenticationOptions options, ref SecurityBuffer incomingSecurity)
         {
             SecurityBuffer[] incomingSecurityBuffers = null;
