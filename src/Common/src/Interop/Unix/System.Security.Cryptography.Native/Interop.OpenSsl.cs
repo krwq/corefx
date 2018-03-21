@@ -50,9 +50,9 @@ internal static partial class Interop
             return bindingHandle;
         }
 
-        private static SslCtxSetClientHelloCallback MakeClientHelloCallback(SslAuthenticationOptions sslAuthenticationOptions)
+        private static Interop.Ssl.SslCtxSetClientHelloCallback MakeClientHelloCallback(SslAuthenticationOptions sslAuthenticationOptions)
         {
-            return new SslCtxSetClientHelloCallback((IntPtr ssl, ref int al, IntPtr arg) => {
+            return new Interop.Ssl.SslCtxSetClientHelloCallback((IntPtr ssl, ref int al, IntPtr arg) => {
                     unsafe
                     {
                         byte* buffer;
