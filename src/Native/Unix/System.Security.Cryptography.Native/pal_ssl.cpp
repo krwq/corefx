@@ -572,7 +572,7 @@ extern "C" void CryptoNative_SslCtxSetAlpnSelectCb(SSL_CTX* ctx, SslCtxSetAlpnCa
 #endif
 }
 
-extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SslCtxSetClientHelloCallback callback, void* arg)
+extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SSL_client_hello_cb_fn callback, void* arg)
 {
     SSL_CTX_set_client_hello_cb(ctx, callback, arg);
 }
