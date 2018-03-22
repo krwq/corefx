@@ -123,9 +123,9 @@ internal static partial class Interop
                     Ssl.SslCtxSetVerify(innerContext, s_verifyClientCertificate);
                 }
 
-                if (sslAuthenticationOptions.ServerCertSelectionDelegate != null)
+                //if (sslAuthenticationOptions.ServerCertSelectionDelegate != null)
                 {
-                    if (Interop.Ssl.SslCtxSetTlsExtServerNameCb(innerContext, MakeServerNameCallback(sslAuthenticationOptions)) != 1)
+                    if (Ssl.SslCtxSetTlsExtServerNameCb(innerContext, MakeServerNameCallback(sslAuthenticationOptions)) != 1)
                     {
                         throw new Exception("something went wrong");
                     }
