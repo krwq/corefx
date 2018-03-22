@@ -60,7 +60,7 @@ internal static partial class Interop
             return (int)(end - buffer);
         }
 
-        private static Interop.Ssl.SslCtxSetClientHelloCallback MakeServerNameCallback(SslAuthenticationOptions sslAuthenticationOptions)
+        private static Interop.Ssl.SslCtxSetTlsExtServerNameCallback MakeServerNameCallback(SslAuthenticationOptions sslAuthenticationOptions)
         {
             return new Interop.Ssl.SslCtxSetTlsExtServerNameCallback((IntPtr ssl, ref int al, IntPtr arg) => {
                     unsafe
