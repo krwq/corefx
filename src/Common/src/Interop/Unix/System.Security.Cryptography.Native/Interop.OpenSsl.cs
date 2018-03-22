@@ -192,7 +192,8 @@ internal static partial class Interop
                     }
 
                     context.AlpnHandle = alpnHandle;
-                    throw new Exception("who calls this?");
+                    if (sslAuthenticationOptions.IsServer)
+                        throw new Exception("who calls this?");
                 }
                 catch
                 {
@@ -205,7 +206,7 @@ internal static partial class Interop
                 }
             }
 
-            //return context;
+            return context;
         }
 
         internal static bool DoSslHandshake(SafeSslHandle context, byte[] recvBuf, int recvOffset, int recvCount, out byte[] sendBuf, out int sendCount)
