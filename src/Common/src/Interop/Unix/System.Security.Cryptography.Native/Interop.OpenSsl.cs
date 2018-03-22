@@ -72,7 +72,7 @@ internal static partial class Interop
                             sslAuthenticationOptions.HostName = System.Text.Encoding.UTF8.GetString(buffer, len);
                         }
                     }
-                    return 1; // SSL_CLIENT_HELLO_SUCCESS // SSL_TLSEXT_ERR_OK 0 ????
+                    return 0; // SSL_CLIENT_HELLO_SUCCESS // SSL_TLSEXT_ERR_OK 0 ????
                 });
         }
 
