@@ -23,6 +23,7 @@ namespace System.Net.Test.Common
         private readonly SemaphoreSlim _clientDataAvailable = new SemaphoreSlim(0);
         private readonly SemaphoreSlim _serverDataAvailable = new SemaphoreSlim(0);
 
+        public bool DisableConnectionBreaking { get; set; } = false;
         private bool _connectionBroken = false;
 
         public void ReadFrame(bool server, out byte[] buffer)
@@ -107,9 +108,12 @@ namespace System.Net.Test.Common
 
         public void BreakConnection()
         {
-            _connectionBroken = true;
-            _serverDataAvailable.Release(1_000_000);
-            _clientDataAvailable.Release(1_000_000);
+            if (!DisableConnectionBreaking)
+            {
+                _connectionBroken = true;
+                _serverDataAvailable.Release(1_000_000);
+                _clientDataAvailable.Release(1_000_000);
+            }
         }
     }
 }

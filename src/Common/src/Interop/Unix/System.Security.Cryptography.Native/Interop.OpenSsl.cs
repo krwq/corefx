@@ -63,6 +63,7 @@ internal static partial class Interop
         private static Interop.Ssl.SslCtxSetTlsExtServerNameCallback MakeServerNameCallback(SslAuthenticationOptions sslAuthenticationOptions)
         {
             return new Interop.Ssl.SslCtxSetTlsExtServerNameCallback((IntPtr ssl, ref int al, IntPtr arg) => {
+                    throw new Exception("my callback was called");
                     unsafe
                     {
                         byte* buffer = Interop.Ssl.SslClientHelloGetHostName(ssl);
