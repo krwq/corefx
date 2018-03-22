@@ -125,7 +125,10 @@ internal static partial class Interop
 
                 if (sslAuthenticationOptions.ServerCertSelectionDelegate != null)
                 {
-                    Interop.Ssl.SslCtxSetTlsExtServerNameCb(innerContext, MakeServerNameCallback(sslAuthenticationOptions));
+                    if (Interop.Ssl.SslCtxSetTlsExtServerNameCb(innerContext, MakeServerNameCallback(sslAuthenticationOptions)) != 1)
+                    {
+                        throw new Exception("something went wrong");
+                    }
                 }
 
                 GCHandle alpnHandle = default;
