@@ -34,6 +34,11 @@ namespace System.Net.Security.Tests
         [Trait("feature", "sni1")]
         public void SslStream_ClientSendsSNIServerReceives_Ok(string hostName)
         {
+            while (!Diagnostics.Debugger.IsAttached)
+            {
+                Thread.Sleep(1);
+                Diagnostics.Debugger.Break();
+            }
             X509Certificate serverCert = Configuration.Certificates.GetSelfSignedServerCertificate();
 
             WithVirtualConnection((server, client) =>
