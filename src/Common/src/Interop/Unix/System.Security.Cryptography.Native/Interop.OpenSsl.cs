@@ -64,16 +64,16 @@ internal static partial class Interop
         {
             return new Interop.Ssl.SslCtxSetTlsExtServerNameCallback((IntPtr ssl, ref int al, IntPtr arg) => {
                     throw new Exception("my callback was called");
-                    unsafe
-                    {
-                        byte* buffer = Interop.Ssl.SslClientHelloGetHostName(ssl);
-                        int len = buffer == null ? 0 : NullTerminatedStringLength(buffer);
-                        if (len > 0)
-                        {
-                            sslAuthenticationOptions.HostName = System.Text.Encoding.UTF8.GetString(buffer, len);
-                        }
-                    }
-                    return 0; // SSL_CLIENT_HELLO_SUCCESS // SSL_TLSEXT_ERR_OK 0 ????
+                    // unsafe
+                    // {
+                    //     byte* buffer = Interop.Ssl.SslClientHelloGetHostName(ssl);
+                    //     int len = buffer == null ? 0 : NullTerminatedStringLength(buffer);
+                    //     if (len > 0)
+                    //     {
+                    //         sslAuthenticationOptions.HostName = System.Text.Encoding.UTF8.GetString(buffer, len);
+                    //     }
+                    // }
+                    // return 0; // SSL_CLIENT_HELLO_SUCCESS // SSL_TLSEXT_ERR_OK 0 ????
                 });
         }
 
