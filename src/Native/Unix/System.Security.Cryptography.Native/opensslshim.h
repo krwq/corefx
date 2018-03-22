@@ -597,6 +597,7 @@ FOR_ALL_OPENSSL_FUNCTIONS
 #define SSL_get_peer_finished SSL_get_peer_finished_ptr
 #define SSL_get_SSL_CTX SSL_get_SSL_CTX_ptr
 #define SSL_get_version SSL_get_version_ptr
+#defune SSL_get_servername SSL_get_servername_ptr
 #define SSL_get0_alpn_selected SSL_get0_alpn_selected_ptr
 #define SSL_library_init SSL_library_init_ptr
 #define SSL_load_error_strings SSL_load_error_strings_ptr
