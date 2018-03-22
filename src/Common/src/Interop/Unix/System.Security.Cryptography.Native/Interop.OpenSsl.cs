@@ -123,7 +123,7 @@ internal static partial class Interop
                     Ssl.SslCtxSetVerify(innerContext, s_verifyClientCertificate);
                 }
 
-                //if (sslAuthenticationOptions.ServerCertSelectionDelegate != null)
+                if (sslAuthenticationOptions.ServerCertSelectionDelegate != null)
                 {
                     if (Ssl.SslCtxSetTlsExtServerNameCb(innerContext, MakeServerNameCallback(sslAuthenticationOptions)) != 1)
                     {
@@ -192,6 +192,7 @@ internal static partial class Interop
                     }
 
                     context.AlpnHandle = alpnHandle;
+                    throw new Exception("who calls this?");
                 }
                 catch
                 {
@@ -204,8 +205,7 @@ internal static partial class Interop
                 }
             }
 
-            throw new Exception("who calls this?");
-            //return context;
+            return context;
         }
 
         internal static bool DoSslHandshake(SafeSslHandle context, byte[] recvBuf, int recvOffset, int recvCount, out byte[] sendBuf, out int sendCount)
