@@ -50,22 +50,29 @@ internal static partial class Interop
             return bindingHandle;
         }
 
-        private static Interop.Ssl.SslCtxSetClientHelloCallback MakeClientHelloCallback(SslAuthenticationOptions sslAuthenticationOptions)
+        private unsafe static int NullTerminatedStringLength(byte* buffer)
         {
-            return new Interop.Ssl.SslCtxSetClientHelloCallback((IntPtr ssl, ref int al, IntPtr arg) => {
+            byte* end;
+            for (end = buffer; *end != 0; end++)
+            {
+            }
+
+            return (int)(end - buffer);
+        }
+
+        private static Interop.Ssl.SslCtxSetClientHelloCallback MakeServerNameCallback(SslAuthenticationOptions sslAuthenticationOptions)
+        {
+            return new Interop.Ssl.SslCtxSetTlsExtServerNameCb((IntPtr ssl, ref int al, IntPtr arg) => {
                     unsafe
                     {
-                        byte* buffer;
-                        int len;
-                        Interop.Ssl.SslClientHelloGetHostName(ssl, out buffer, out len);
-                        // or TLSEXT_NAMETYPE_host_name ?
-                        if (buffer != null && len > 0)
+                        byte* buffer = Interop.Ssl.SslClientHelloGetHostName(ssl);
+                        int len = buffer == null ? 0 : NullTerminatedStringLength(buffer);
+                        if (len > 0)
                         {
                             sslAuthenticationOptions.HostName = System.Text.Encoding.UTF8.GetString(buffer, len);
                         }
-                        //TODO: if (buffer != null) OPENSSL_free(buffer)
                     }
-                    return 1; // SSL_CLIENT_HELLO_SUCCESS
+                    return 1; // SSL_CLIENT_HELLO_SUCCESS // SSL_TLSEXT_ERR_OK 0 ????
                 });
         }
 
@@ -117,7 +124,7 @@ internal static partial class Interop
 
                 if (sslAuthenticationOptions.ServerCertSelectionDelegate != null)
                 {
-                    Interop.Ssl.SslCtxSetClientHelloCb(innerContext, MakeClientHelloCallback(sslAuthenticationOptions), IntPtr.Zero);
+                    Interop.Ssl.SslCtxSetTlsExtServerNameCb(innerContext, MakeServerNameCallback(sslAuthenticationOptions));
                 }
 
                 GCHandle alpnHandle = default;

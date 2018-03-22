@@ -126,8 +126,8 @@ typedef int32_t (*SslCtxSetAlpnCallback)(SSL* ssl,
     uint32_t inlen,
     void* arg);
 
-// the function pointer definition for the callback used in SslCtxSetClientHelloCb
-typedef int32_t (*SslCtxSetClientHelloCallback)(SSL* ssl, int32_t* al, void* arg);
+// the function pointer definition for the callback used in SslCtxSetTlsExtServerNameCb
+typedef int32_t (*SslCtxSetTlsExtServerNameCb)(SSL* ssl, int32_t*, void*);
 
 /*
 Ensures that libssl is correctly initialized and ready to use.
@@ -378,15 +378,18 @@ Shims the ssl_ctx_set_alpn_select_cb method.
 */
 extern "C" void CryptoNative_SslCtxSetAlpnSelectCb(SSL_CTX* ctx, SslCtxSetAlpnCallback cb, void *arg);
 
-/*
-Shims the ssl_ctx_set_client_hello_cb method.
-*/
-extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SslCtxSetClientHelloCallback callback, void* arg);
+// /*
+// Shims the ssl_ctx_set_client_hello_cb method.
+// */
+// extern "C" void CryptoNative_SslCtxSetClientHelloCb(SSL_CTX* ctx, SslCtxSetClientHelloCallback callback, void* arg);
 
-/*
-Gets hostname out of the client hello
-*/
-extern "C" void CryptoNative_SslClientHelloGetHostName(SSL* ssl, const unsigned char** out, size_t* outlen);
+// /*
+// Gets hostname out of the client hello
+// */
+// extern "C" void CryptoNative_SslClientHelloGetHostName(SSL* ssl, const unsigned char** out, size_t* outlen)
+
+extern "C" long CryptoNative_SslCtxSetTlsExtServerNameCb(SSL_CTX *ctx, SslCtxSetTlsExtServerNameCb cb);
+extern "C" const char* CryptoNative_SslGetHostName(const SSL *s);
 
 /*
 Shims the ssl_ctx_set_alpn_protos method.

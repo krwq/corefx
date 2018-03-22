@@ -54,8 +54,8 @@ internal static partial class Interop
         [DllImport(Libraries.CryptoNative, EntryPoint = "CryptoNative_SslGet0AlpnSelected")]
         internal static extern void SslGetAlpnSelected(SafeSslHandle ssl, out IntPtr protocol, out int len);
 
-        [DllImport(Libraries.CryptoNative, EntryPoint = "CryptoNative_SslClientHelloGetHostName")]
-        internal static unsafe extern int SslClientHelloGetHostName(IntPtr ssl, out byte* buffer, out int len);
+        [DllImport(Libraries.CryptoNative, EntryPoint = "CryptoNative_SslGetHostName")]
+        internal static unsafe extern byte* SslClientHelloGetHostName(IntPtr ssl);
 
         internal static byte[] SslGetAlpnSelected(SafeSslHandle ssl)
         {
