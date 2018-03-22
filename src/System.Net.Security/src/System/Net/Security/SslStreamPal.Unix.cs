@@ -32,17 +32,18 @@ namespace System.Net.Security
         public static SecurityStatusPal AcceptSecurityContext(ref SafeFreeCredentials credential, ref SafeDeleteContext context,
             SecurityBuffer[] inputBuffers, SecurityBuffer outputBuffer, SslAuthenticationOptions sslAuthenticationOptions)
         {
-            if (inputBuffers != null)
-            {
-                Debug.Assert(inputBuffers.Length == 2);
-                Debug.Assert(inputBuffers[1].token == null);
+            throw new Exception("gowno");
+            //if (inputBuffers != null)
+            //{
+            //    Debug.Assert(inputBuffers.Length == 2);
+            //    Debug.Assert(inputBuffers[1].token == null);
 
-                return HandshakeInternal(credential, ref context, inputBuffers[0], outputBuffer, sslAuthenticationOptions);
-            }
-            else
-            {
-                return HandshakeInternal(credential, ref context, inputBuffer: null, outputBuffer, sslAuthenticationOptions);
-            }
+            //    return HandshakeInternal(credential, ref context, inputBuffers[0], outputBuffer, sslAuthenticationOptions);
+            //}
+            //else
+            //{
+            //    return HandshakeInternal(credential, ref context, inputBuffer: null, outputBuffer, sslAuthenticationOptions);
+            //}
         }
 
         public static SecurityStatusPal InitializeSecurityContext(ref SafeFreeCredentials credential, ref SafeDeleteContext context,

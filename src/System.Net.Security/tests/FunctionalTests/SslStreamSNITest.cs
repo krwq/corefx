@@ -25,12 +25,13 @@ namespace System.Net.Security.Tests
         private static IEnumerable<object[]> HostNameData()
         {
             yield return new object[] { "a" };
-            yield return new object[] { "test" };
-            yield return new object[] { new string('a', 100) };
+           // yield return new object[] { "test" };
+            //yield return new object[] { new string('a', 100) };
         }
 
         [Theory]
         [MemberData(nameof(HostNameData))]
+        [Trait("feature", "sni1")]
         public void SslStream_ClientSendsSNIServerReceives_Ok(string hostName)
         {
             X509Certificate serverCert = Configuration.Certificates.GetSelfSignedServerCertificate();
