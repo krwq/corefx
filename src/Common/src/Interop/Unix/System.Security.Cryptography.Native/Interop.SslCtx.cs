@@ -16,7 +16,7 @@ internal static partial class Interop
         internal delegate int AppVerifyCallback(IntPtr storeCtx, IntPtr arg);
         internal delegate int ClientCertCallback(IntPtr ssl, out IntPtr x509, out IntPtr pkey);
         internal unsafe delegate int SslCtxSetAlpnCallback(IntPtr ssl, out byte* outp, out byte outlen, byte* inp, uint inlen, IntPtr arg);
-        internal delegate int SslCtxSetTlsExtServerNameCb(IntPtr ssl, ref int al, IntPtr arg);
+        internal delegate int SslCtxSetTlsExtServerNameCallback(IntPtr ssl, ref int al, IntPtr arg);
 
         [DllImport(Libraries.CryptoNative, EntryPoint = "CryptoNative_SslCtxCreate")]
         internal static extern SafeSslContextHandle SslCtxCreate(IntPtr method);
@@ -37,7 +37,7 @@ internal static partial class Interop
         internal static unsafe extern void SslCtxSetAlpnSelectCb(SafeSslContextHandle ctx, SslCtxSetAlpnCallback callback, IntPtr arg);
 
         [DllImport(Libraries.CryptoNative, EntryPoint = "CryptoNative_SslCtxSetTlsExtServerNameCb")]
-        internal static extern long SslCtxSetTlsExtServerNameCb(SafeSslContextHandle ctx, SslCtxSetTlsExtServerNameCb callback);
+        internal static extern long SslCtxSetTlsExtServerNameCb(SafeSslContextHandle ctx, SslCtxSetTlsExtServerNameCallback callback);
 
         internal static unsafe int SslCtxSetAlpnProtos(SafeSslContextHandle ctx, List<SslApplicationProtocol> protocols)
         {
