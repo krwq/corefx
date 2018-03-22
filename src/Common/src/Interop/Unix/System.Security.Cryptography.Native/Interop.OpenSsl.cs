@@ -129,6 +129,8 @@ internal static partial class Interop
                     {
                         throw new Exception("something went wrong");
                     }
+
+                    throw new Exception("if this doesn't throw it is bad");
                 }
 
                 GCHandle alpnHandle = default;
