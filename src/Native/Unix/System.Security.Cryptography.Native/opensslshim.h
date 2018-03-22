@@ -279,7 +279,7 @@ void SSL_get0_alpn_selected(const SSL* ssl, const unsigned char** protocol, unsi
     PER_FUNCTION_BLOCK(SSL_CTX_set_cert_verify_callback, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_set_cipher_list, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_set_client_cert_cb, true) \
-    PER_FUNCTION_BLOCK(SSL_CTX_set_tlsext_servername_callback, true) \
+    PER_FUNCTION_BLOCK(SSL_CTX_callback_ctrl, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_set_quiet_shutdown, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_set_verify, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_use_certificate, true) \
@@ -581,7 +581,7 @@ FOR_ALL_OPENSSL_FUNCTIONS
 #define SSL_CTX_set_cert_verify_callback SSL_CTX_set_cert_verify_callback_ptr
 #define SSL_CTX_set_cipher_list SSL_CTX_set_cipher_list_ptr
 #define SSL_CTX_set_client_cert_cb SSL_CTX_set_client_cert_cb_ptr
-#define SSL_CTX_set_tlsext_servername_callback SSL_CTX_set_tlsext_servername_callback_ptr
+#define SSL_CTX_callback_ctrl SSL_CTX_callback_ctrl_ptr
 #define SSL_CTX_set_quiet_shutdown SSL_CTX_set_quiet_shutdown_ptr
 #define SSL_CTX_set_verify SSL_CTX_set_verify_ptr
 #define SSL_CTX_use_certificate SSL_CTX_use_certificate_ptr
