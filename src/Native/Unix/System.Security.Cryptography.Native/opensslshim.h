@@ -279,6 +279,7 @@ void SSL_get0_alpn_selected(const SSL* ssl, const unsigned char** protocol, unsi
     PER_FUNCTION_BLOCK(SSL_CTX_set_cert_verify_callback, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_set_cipher_list, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_set_client_cert_cb, true) \
+    PER_FUNCTION_BLOCK(SSL_CTX_set_tlsext_servername_callback, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_set_quiet_shutdown, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_set_verify, true) \
     PER_FUNCTION_BLOCK(SSL_CTX_use_certificate, true) \
@@ -294,6 +295,7 @@ void SSL_get0_alpn_selected(const SSL* ssl, const unsigned char** protocol, unsi
     PER_FUNCTION_BLOCK(SSL_get_peer_finished, true) \
     PER_FUNCTION_BLOCK(SSL_get_SSL_CTX, true) \
     PER_FUNCTION_BLOCK(SSL_get_version, true) \
+    PER_FUNCTION_BLOCK(SSL_get_servername, true) \
     PER_FUNCTION_BLOCK(SSL_get0_alpn_selected, false) \
     PER_FUNCTION_BLOCK(SSL_library_init, true) \
     PER_FUNCTION_BLOCK(SSL_load_error_strings, true) \
