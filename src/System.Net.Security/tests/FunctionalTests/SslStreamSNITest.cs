@@ -37,8 +37,9 @@ namespace System.Net.Security.Tests
             while (!Diagnostics.Debugger.IsAttached)
             {
                 Thread.Sleep(1);
-                Diagnostics.Debugger.Break();
             }
+            Diagnostics.Debugger.Break();
+
             X509Certificate serverCert = Configuration.Certificates.GetSelfSignedServerCertificate();
 
             WithVirtualConnection((server, client) =>
