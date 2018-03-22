@@ -204,7 +204,8 @@ internal static partial class Interop
                 }
             }
 
-            return context;
+            throw new Exception("who calls this?");
+            //return context;
         }
 
         internal static bool DoSslHandshake(SafeSslHandle context, byte[] recvBuf, int recvOffset, int recvCount, out byte[] sendBuf, out int sendCount)
