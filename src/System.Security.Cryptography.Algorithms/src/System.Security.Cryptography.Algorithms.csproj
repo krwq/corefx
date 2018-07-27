@@ -431,6 +431,9 @@
     <Compile Include="$(CommonPath)\Interop\Unix\System.Security.Cryptography.Native\Interop.Initialization.cs">
       <Link>Common\Interop\Unix\System.Security.Cryptography.Native\Interop.Initialization.cs</Link>
     </Compile>
+    <Compile Include="$(CommonPath)\Interop\Unix\System.Security.Cryptography.Native\Interop.OpenSslVersion.cs">
+        <Link>Common\Interop\Unix\System.Security.Cryptography.Native\Interop.OpenSslVersion.cs</Link>
+    </Compile>
     <Compile Include="$(CommonPath)\Interop\Unix\System.Security.Cryptography.Native\Interop.RAND.cs">
       <Link>Common\Interop\Unix\System.Security.Cryptography.Native\Interop.RAND.cs</Link>
     </Compile>
@@ -463,9 +466,6 @@
     </Compile>
     <Compile Include="$(CommonPath)\Microsoft\Win32\SafeHandles\SafeInteriorHandle.cs">
       <Link>Common\Microsoft\Win32\SafeHandles\SafeInteriorHandle.cs</Link>
-    </Compile>
-    <Compile Include="$(CommonPath)\Microsoft\Win32\SafeHandles\SafeKeyHandle.cs">
-      <Link>Common\Microsoft\Win32\SafeHandles\SafeKeyHandle.cs</Link>
     </Compile>
     <Compile Include="$(CommonPath)\Microsoft\Win32\SafeHandles\SafeEvpPKeyHandle.Unix.cs">
       <Link>Common\Microsoft\Win32\SafeHandles\SafeEvpPKeyHandle.Unix.cs</Link>
